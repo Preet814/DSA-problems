@@ -1,0 +1,39 @@
+Problem: Given a string S consisting of only opening and closing curly brackets '{' and '}', find out the minimum number of reversals required to convert the string into a 
+          balanced expression. A reversal means changing '{' to '}' or vice-versa.
+          
+          Example 1:
+          Input:
+          S = "}{{}}{{{"
+          Output: 3
+          Explanation: One way to balance is:
+          "{{{}}{}}". There is no balanced sequence
+          that can be formed in lesser reversals.
+
+Solution: 
+
+          int countRev (string s)
+          {
+              if(s.length()%2!=0){
+                  return -1;
+              }
+              else{
+                  stack<char> st;
+                  int c1=0;
+                  int c2=0;
+                  for(int i=0;i<s.length();i++){
+                      char ch=s[i];
+                      if(ch=='{'){
+                          st.push(ch);
+                          c2++;
+                      }
+                      else if(ch=='}' && !st.empty() && st.top()=='{'){
+                          st.pop();
+                          c2--;
+                      }
+                      else{
+                          c1++;
+                      }
+                  }
+                  return (c1+1)/2+(c2+1)/2;
+              }
+          }
