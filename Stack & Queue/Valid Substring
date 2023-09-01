@@ -1,0 +1,32 @@
+Problem: Given a string S consisting only of opening and closing parenthesis 'ie '('  and ')', find out the length of the longest valid(well-formed) parentheses substring.
+          NOTE: Length of the smallest valid substring ( ) is 2.
+          
+          Example 1:
+          Input: S = "(()("
+          Output: 2
+          Explanation: The longest valid 
+          substring is "()". Length = 2.
+
+Solution:
+
+          int findMaxLen(string s) {
+                  stack<int>st;
+                  int maxval=0;
+                  st.push(-1);
+                  for(int i=0; i<s.size(); i++){
+                      if(s[i]=='('){
+                          st.push(i);
+                      }
+                      else{
+                          st.pop();
+                       
+                          if(st.empty()){
+                              st.push(i);
+                          }
+                          else{
+                              maxval=max(maxval, i-st.top());
+                          }
+                      }
+                  }
+                  return maxval;
+              }          
