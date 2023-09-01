@@ -1,0 +1,50 @@
+Problem: Given string S representing a postfix expression, the task is to evaluate the expression and find the final value. Operators will only include the basic arithmetic 
+          operators like *, /, + and -.
+
+          Example 1:
+          Input: S = "231*+9-"
+          Output: -4
+          Explanation:
+          After solving the given expression, 
+          we have -4 as result.
+
+Solution: 
+
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<long> st;
+        for(auto s:tokens)
+        {
+            if(s=="+" || s=="-"|| s=="/"|| s=="*")
+            {
+                long x=st.top();
+                st.pop();
+                long y=st.top();
+                st.pop();
+                if(s == "+")
+                {
+                    st.push(y+x);
+                }
+                else if(s == "-")
+                {
+                    st.push(y-x);
+                }
+                else if(s == "*")
+                {
+                    st.push(y*x);
+                }
+                else
+                {
+                    st.push(y/x);
+                }
+            }
+            else
+            {
+                int n=stoi(s);
+                st.push(n);
+            }
+        }
+        return st.top();
+    }
+};
