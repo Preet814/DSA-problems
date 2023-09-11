@@ -1,0 +1,38 @@
+Problem: Given a binary tree, find the Postorder Traversal of it.
+For Example, the postorder traversal of the following tree is:
+5 10 39 1
+
+        1
+     /     \
+   10     39
+  /
+5
+
+
+Example 1:
+
+Input:
+        19
+     /     \
+    10      8
+  /    \
+ 11    13
+Output: 11 13 10 8 19
+
+Solution:  
+
+void solve(Node *root,vector<int> &res)
+{
+    if(!root) 
+        return;
+    solve(root->left,res);
+    solve(root->right,res);
+    res.push_back(root->data);
+}
+vector<int>postOrder(Node* root)
+{
+  // Your code here
+  vector<int> res;
+   solve(root,res);
+   return res;
+}
