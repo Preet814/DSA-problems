@@ -1,0 +1,51 @@
+Problem: Given two array A[0….N-1] and B[0….M-1] of size N and M respectively, representing two numbers such that every element of arrays represent a digit. For example, 
+          A[] = { 1, 2, 3} and B[] = { 2, 1, 4 } represent 123 and 214 respectively. The task is to find the sum of both the numbers.
+
+          Example 1:
+          Input : A[] = {1, 2}, B[] = {2, 1}
+          Output : 33
+          Explanation:
+          N=2, and A[]={1,2}
+          M=2, and B[]={2,1}
+          Number represented by first array is 12.
+          Number represented by second array is 21
+          Sum=12+21=33
+
+Solution: 
+
+class Solution{
+    public:
+    string calc_Sum(int *a,int n,int *b,int m){
+        string ans;
+        int i=n-1;
+        int j=m-1;
+        int carry=0;
+        while(i>=0&&j>=0){
+            int x=a[i]+b[j]+carry;
+            ans.insert(ans.begin(),(x%10+'0'));
+            i--;
+            j--;
+            carry=x/10;
+        }
+        while(i>=0){
+            int x=a[i]+0+carry;
+            ans.insert(ans.begin(),(x%10+'0'));
+            i--;
+             carry=x/10;
+        }      
+        while(j>=0){
+            int x=b[j]+0+carry;
+            ans.insert(ans.begin(),(x%10+'0'));
+            j--;
+             carry=x/10;
+        }
+        if(carry){
+             ans.insert(ans.begin(),(carry+'0'));
+        }
+        while(ans[0]=='0'){
+            ans.erase(0,1);
+        }
+    
+      return ans;  
+    }
+};
