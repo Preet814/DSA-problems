@@ -1,0 +1,44 @@
+Problem: Given inorder and postorder traversals of a Binary Tree in the arrays in[] and post[] respectively. The task is to construct the binary tree from these traversals.
+
+Example 1:
+Input:
+N = 8
+in[] = 4 8 2 5 1 6 3 7
+post[] =8 4 5 2 6 7 3 1
+Output: 1 2 4 8 5 3 6 7
+Explanation: For the given postorder and
+inorder traversal of tree the  resultant
+binary tree will be
+           1
+       /      \
+     2         3
+   /  \      /  \
+  4    5    6    7
+   \
+     8
+
+Solution:
+
+int findPosition(int in[],int element,int inOrderStart,int inOrderEnd){
+        for(int i=inOrderStart;i<=inOrderEnd;i++){
+            if(in[i]==element)
+                return i;
+        }
+        return -1;
+    }
+    Node* solve(int in[],int post[],int& index,int inOrderStart,int inOrderEnd,int n){
+        if(index<0 || inOrderStart>inOrderEnd)
+            return NULL;
+        
+        int element=post[index--];
+        Node* root=new Node(element);
+        int position=findPosition(in,element,inOrderStart,inOrderEnd);
+        root->right=solve(in,post,index,position+1,inOrderEnd,n);
+        root->left=solve(in,post,index,inOrderStart,position-1,n);
+        return root;
+    }
+Node *buildTree(int in[], int post[], int n) {
+    int postOrderIndex=n-1;
+    Node* ans=solve(in,post,postOrderIndex,0,n-1,n);
+    return ans;
+}
