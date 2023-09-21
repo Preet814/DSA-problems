@@ -1,0 +1,93 @@
+Problem:  Given a binary tree and a node data called target. Find the minimum time required to burn the complete binary tree if the target is set on fire. It is known that 
+          in 1 second all nodes connected to a given node get burned. That is its left child, right child, and parent.
+          Note: The tree contains unique values.
+          
+          Example 1:
+          Input:      
+                    1
+                  /   \
+                2      3
+              /  \      \
+             4    5      6
+                 / \      \
+                7   8      9
+                             \
+                             10
+          Target Node = 8
+          Output: 7
+          Explanation: If leaf with the value 
+          8 is set on fire. 
+          After 1 sec: 5 is set on fire.
+          After 2 sec: 2, 7 are set to fire.
+          After 3 sec: 4, 1 are set to fire.
+          After 4 sec: 3 is set to fire.
+          After 5 sec: 6 is set to fire.
+          After 6 sec: 9 is set to fire.
+          After 7 sec: 10 is set to fire.
+          It takes 7s to burn the complete tree.
+
+Solution:
+
+Node* createMapping(Node* root,int target,map<Node*,Node*>& nodeToParent){
+        queue<Node*> q;
+        q.push(root);
+        nodeToParent[root]=NULL;
+        Node* ans;
+        while(!q.empty()){
+            Node* node=q.front();
+            q.pop();
+            if(node->data==target){
+                ans=node;
+            }
+            if(node->left){
+                nodeToParent[node->left]=node;
+                q.push(node->left);
+            }
+            if(node->right){
+                nodeToParent[node->right]=node;
+                q.push(node->right);
+            }
+        }
+        return ans;
+    }
+    int burnTree(map<Node*,Node*>& nodeToParent,Node* root){
+        map<Node*,bool> visited;
+        queue<Node*> q;
+        q.push(root);
+        visited[root]=true;
+        int ans=0;
+        while(!q.empty()){
+            int size=q.size();
+            int flag=0;
+            for(int i=0;i<size;i++){
+                Node* node=q.front();
+                q.pop();
+                if(node->left && !visited[node->left]){
+                    flag=1;
+                    visited[node->left]=true;
+                    q.push(node->left);
+                }
+                if(node->right && !visited[node->right]){
+                    flag=1;
+                    visited[node->right]=true;
+                    q.push(node->right);
+                }
+                if(nodeToParent[node] && !visited[nodeToParent[node]]){
+                    flag=1;
+                    visited[nodeToParent[node]]=true;
+                    q.push(nodeToParent[node]);
+                }
+            }
+            if(flag==1){
+                ans++;
+            }
+        }
+        return ans;
+    }
+    int minTime(Node* root, int target) 
+    {
+        map<Node*,Node*> nodeToParent;
+        Node* targetNode = createMapping(root,target,nodeToParent);
+        int ans = burnTree(nodeToParent,targetNode);
+        return ans;
+    }
