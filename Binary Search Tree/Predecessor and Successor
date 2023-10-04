@@ -1,0 +1,46 @@
+Problem: There is BST given with the root node with the key part as an integer only. You need to find the in-order successor and predecessor of a given key. If either 
+          predecessor or successor is not found, then set it to NULL.
+          Note:- In an inorder traversal the number just smaller than the target is the predecessor and the number just greater than the target is the successor. 
+          
+          Example 1:
+          Input:
+                  10
+                /   \
+               2    11
+             /  \ 
+            1    5
+                /  \
+               3    6
+                \
+                 4
+          key = 8
+          Output: 
+          6 10
+          Explanation: 
+          In the given BST the inorder predecessor of 8 is 6 and inorder successor of 8 is 10.
+
+Solution:
+
+void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+    {
+        Node* temp1=root;
+        while(temp1!=NULL){
+            if(temp1->key>key){
+                suc=temp1;
+                temp1=temp1->left;
+            }
+            else{
+                temp1=temp1->right;
+            }
+        }
+        Node* temp2=root;
+        while(temp2!=NULL){
+            if(temp2->key<key){
+                pre=temp2;
+                temp2=temp2->right;
+            }
+            else{
+                temp2=temp2->left;
+            }
+        }
+    }
