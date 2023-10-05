@@ -1,0 +1,29 @@
+Problem:Given a BST and an integer K. Find the Kth Smallest element in the BST using O(1) extra space. 
+          
+          Example 1:
+          Input:
+                2
+              /   \
+             1     3
+          K = 2
+          Output: 2
+          Explanation: 2 is the 2nd smallest element in the BST
+
+Solution:
+
+void inorder(Node* root,vector<int>& ans){
+        if(root==NULL)
+            return;
+        inorder(root->left,ans);
+        ans.push_back(root->data);
+        inorder(root->right,ans);
+    }
+    int KthSmallestElement(Node *root, int K) {
+        vector<int> ans;
+        inorder(root,ans);
+        if(K>ans.size())
+            return -1;
+        if(ans[K-1]==0)
+            return -1;
+        return ans[K-1];
+    }
