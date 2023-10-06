@@ -1,0 +1,14 @@
+Solution: BinaryTreeNode<int>* inorderToBST(int start,int end,vector<int>& preorder){
+        if(start>end)
+            return NULL;
+        // int mid=start+(end-start)/2;
+        int mid=(start+end)/2;
+        BinaryTreeNode<int>* root=new BinaryTreeNode<int>(preorder[mid]);
+        root->left=inorderToBST(start,mid-1,preorder);
+        root->right=inorderToBST(mid+1,end,preorder);
+        return root;
+    }
+BinaryTreeNode<int>* preorderToBST(vector<int> &preorder) {
+    sort(preorder.begin(),preorder.end());
+    return inorderToBST(0,preorder.size()-1,preorder);
+}
