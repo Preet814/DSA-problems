@@ -1,0 +1,39 @@
+Problem: Given a Binary Search Tree, modify the given BST such that it is balanced and has minimum possible height. Return the balanced BST.
+
+          Example1:
+          Input:
+                 30
+                /
+               20
+              /
+             10
+          Output:
+               20
+             /   \
+           10     30
+
+Solution:
+
+void inorder(Node* root,vector<int>& ans){
+        if(root==NULL)  
+            return;
+        inorder(root->left,ans);
+        ans.push_back(root->data);
+        inorder(root->right,ans);
+    }
+    Node* inorderToBST(int start,int end,vector<int>& ans){
+        if(start>end)
+            return NULL;
+        // int mid=start+(end-start)/2;
+        int mid=(start+end)/2;
+        Node* root=new Node(ans[mid]);
+        root->left=inorderToBST(start,mid-1,ans);
+        root->right=inorderToBST(mid+1,end,ans);
+        return root;
+    }
+    Node* buildBalancedTree(Node* root)
+    {
+    	vector<int> ans;
+    	inorder(root,ans);
+    	return inorderToBST(0,ans.size()-1,ans);
+    }
