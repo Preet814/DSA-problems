@@ -1,0 +1,58 @@
+Problem: Given a binary tree. Find the size of its largest subtree that is a Binary Search Tree.
+        Note: Here Size is equal to the number of nodes in the subtree.
+        
+        Example 1:
+        Input:
+                1
+              /   \
+             4     4
+           /   \
+          6     8
+        Output: 1
+        Explanation: There's no sub-tree with size
+        greater than 1 which forms a BST. All the
+        leaf Nodes are the BSTs with size equal
+        to 1.
+
+Solution:
+
+class Solution{
+    public:
+    /*You are required to complete this method */
+    // Return the size of the largest sub-tree which is also a BST
+    class Info{
+        public:
+            int maxi;
+            int mini;
+            bool isBST;
+            int size;
+    };
+    Info solve(Node* root,int& ans){
+        if(root==NULL)
+            return {INT_MIN,INT_MAX,true,0};
+        Info left=solve(root->left,ans);
+        Info right=solve(root->right,ans);
+        
+        Info currNode;
+        currNode.size=left.size+right.size+1;
+        currNode.maxi=max(root->data,right.maxi);
+        currNode.mini=min(root->data,left.mini);
+        if(left.isBST && right.isBST && (root->data>left.maxi) && (root->data<right.mini)){
+            currNode.isBST=true;
+        }
+        else{
+            currNode.isBST=false;
+        }
+        if(currNode.isBST){
+            ans=max(ans,currNode.size);
+        }
+        return currNode;
+        
+    }
+    int largestBst(Node *root)
+    {
+    	int maxSize=0;
+    	Info temp=solve(root,maxSize);
+    	return maxSize;
+    }
+};
