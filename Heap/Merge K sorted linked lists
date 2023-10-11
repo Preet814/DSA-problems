@@ -1,0 +1,52 @@
+Problem : Given K sorted linked lists of different sizes. The task is to merge them in such a way that after merging they will be a single sorted linked list.
+
+          Example 1:
+          Input:
+          K = 4
+          value = {{1,2,3},{4 5},{5 6},{7,8}}
+          Output: 1 2 3 4 5 5 6 7 8
+          Explanation:
+          The test case has 4 sorted linked 
+          list of size 3, 2, 2, 2
+          1st    list     1 -> 2-> 3
+          2nd   list      4->5
+          3rd    list      5->6
+          4th    list      7->8
+          The merged list will be
+          1->2->3->4->5->5->6->7->8.
+
+Solution : 
+
+class compare{
+        public:
+            bool operator()(Node* a,Node* b){
+                return a->data > b->data;
+            }
+    };
+    Node* mergeKLists(Node *lists[], int k)
+    {
+        priority_queue<Node*,vector<Node*>,compare> pq;
+        if(k==0)
+            return NULL;
+        for(int i=0;i<k;i++){
+            if(lists[i]!=NULL)
+                pq.push(lists[i]);
+        }
+        Node* head=NULL;
+        Node* tail=NULL;
+        while(!pq.empty()){
+            Node* mini=pq.top();
+            pq.pop();
+            if(head==NULL){
+                head=tail=mini;
+            }
+            else{
+                tail->next=mini;
+                tail=mini;
+            }
+            if(mini->next!=NULL){
+                pq.push(mini->next);
+            }
+        }
+        return head;
+    }
