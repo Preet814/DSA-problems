@@ -1,0 +1,26 @@
+Solution :
+
+void inorder(BinaryTreeNode* root,vector<int>& ans){
+	if(root==NULL)
+		return;
+	inorder(root->left,ans);
+	ans.push_back(root->data);
+	inorder(root->right,ans);
+}
+void bstToMinHeap(BinaryTreeNode* root,vector<int>& ans,int& i){
+	if(root==NU LL)
+		return;
+	
+	root->data=ans[i++];
+	bstToMinHeap(root->left,ans,i);
+	bstToMinHeap(root->right,ans,i);
+
+}
+BinaryTreeNode* convertBST(BinaryTreeNode* root)
+{
+	vector<int> ans;
+	inorder(root,ans);
+	int i=0;
+	bstToMinHeap(root,ans,i);
+	return root;
+}
