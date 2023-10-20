@@ -1,0 +1,57 @@
+Problem : Given a grid of size n*m (n is the number of rows and m is the number of columns in the grid) consisting of '0's (Water) and '1's(Land). Find the number of islands.
+          Note: An island is either surrounded by water or boundary of grid and is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., 
+          in all 8 directions.
+          
+          Example 1:
+          Input:
+          grid = {{0,1},{1,0},{1,1},{1,0}}
+          Output:
+          1
+          Explanation:
+          The grid is-
+          0 1
+          1 0
+          1 1
+          1 0
+          All lands are connected.
+
+Solution :
+
+void bfs(int row,int col,vector<vector<char>>& grid,vector<vector<bool>>& visited){
+        int n=grid.size();
+        int m=grid[0].size();
+        visited[row][col]=1;
+        queue<pair<int,int>> q;
+        q.push({row,col});
+        while(!q.empty()){
+            int row=q.front().first;
+            int col=q.front().second;
+            q.pop();
+            //traverse in all 8 directions
+            for(int delrow=-1;delrow<=1;delrow++){
+                for(int delcol=-1;delcol<=1;delcol++){
+                    int nrow=row+delrow;
+                    int ncol=col+delcol;
+                    if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && visited[nrow][ncol]!=1 && grid[nrow][ncol]=='1'){
+                        visited[nrow][ncol]=1;
+                        q.push({nrow,ncol});
+                    }
+                }
+            }
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+        vector<vector<bool>> visited(n,vector<bool>(m,false));
+        int count=0;
+        for(int row=0;row<n;row++){
+            for(int col=0;col<m;col++){
+                if(!visited[row][col] && grid[row][col]=='1'){
+                    count++;
+                    bfs(row,col,grid,visited);
+                }
+            }
+        }
+        return count;
+    }
