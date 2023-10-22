@@ -32,11 +32,11 @@ Solution :
     //     }
     //     return false;
     // }
-    bool DFSdetectCycle1(int src,int parent,vector<int> adj[],vector<bool>& visited){
+    bool DFSdetectCycle(int src,int parent,vector<int> adj[],vector<bool>& visited){
         visited[src]=true;
         for(auto it:adj[src]){
             if(!visited[it]){
-                if(detectCycle1(it,src,adj,visited)){
+                if(DFSdetectCycle(it,src,adj,visited)){
                     return true;
                 }
             }
