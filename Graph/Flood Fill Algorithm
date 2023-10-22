@@ -1,0 +1,66 @@
+Problem : An image is represented by a 2-D array of integers, each integer representing the pixel value of the image.
+          Given a coordinate (sr, sc) representing the starting pixel (row and column) of the flood fill, and a pixel value newColor, "flood fill" the image.
+          To perform a "flood fill", consider the starting pixel, plus any pixels connected 4-directionally to the starting pixel of the same color as the starting 
+          pixel, plus any pixels connected 4-directionally to those pixels (also with the same color as the starting pixel), and so on. Replace the color of all of 
+          the aforementioned pixels with the newColor.
+          
+          Example 1:
+          Input: image = {{1,1,1},{1,1,0},{1,0,1}},
+          sr = 1, sc = 1, newColor = 2.
+          Output: {{2,2,2},{2,2,0},{2,0,1}}
+          Explanation: From the center of the image 
+          (with position (sr, sc) = (1, 1)), all 
+          pixels connected by a path of the same color
+          as the starting pixel are colored with the new 
+          color.Note the bottom corner is not colored 2, 
+          because it is not 4-directionally connected to 
+          the starting pixel.
+
+Solution :
+
+void  bfs(int i,int j,vector<vector<int>>& image,int newColor,vector<vector<bool>>& visited,int value){
+        int n=image.size();
+        int m=image[0].size();
+        image[i][j]=newColor;
+        queue<pair<int,int>> q;
+        q.push({i,j});
+        int delR[]={-1,0,1,0};
+        int delC[]={0,1,0,-1};
+        while(!q.empty()){
+            int row=q.front().first;
+            int col=q.front().second;
+            q.pop();
+            for(int i=0;i<4;i++){
+                int nrow=row+delR[i];
+                int ncol=col+delC[i];
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && visited[nrow][ncol]!=true && image[nrow][ncol]==value){
+                    visited[nrow][ncol]=true;
+                    image[nrow][ncol]=newColor;
+                    q.push({nrow,ncol});
+                }
+            }
+        }
+    }
+    void dfs(int row,int col,vector<vector<int>>& image,int newColor,vector<vector<bool>>& visited,int value,int n,int m){
+        image[row][col] = newColor;
+        int delrow[]={-1,0,1,0};
+        int delcol[]={0,1,0,-1};
+        for(int i = 0; i < 4; ++i){
+            int nrow = row + delrow[i];
+            int ncol = col + delcol[i];
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && image[nrow][ncol]==value && visited[nrow][ncol]!= true){
+                visited[nrow][ncol]=true;
+                dfs(nrow,ncol,image,newColor,visited,value,n,m);
+            }
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int n=image.size();
+        int m=image[0].size();
+        int value=image[sr][sc];
+        vector<vector<bool>> visited(n,vector<bool>(m,false));
+        visited[sr][sc]=true;
+        //bfs(sr,sc,image,newColor,visited,value);
+        dfs(sr,sc,image,newColor,visited,value,n,m);
+        return image;
+    }
