@@ -1,0 +1,69 @@
+Problem : Given a matrix mat of size N x M where every element is either 'O' or 'X'. Replace all 'O' or a group of 'O' with 'X' that are surrounded by 'X'.
+          A 'O' (or a set of 'O') is considered to be surrounded by 'X' if there are 'X' at locations just below, just above, just left and just right of it.
+          
+          Example 1:
+          Input: 
+          n = 5, m = 4
+          mat = {{'X', 'X', 'X', 'X'}, 
+                 {'X', 'O', 'X', 'X'}, 
+                 {'X', 'O', 'O', 'X'}, 
+                 {'X', 'O', 'X', 'X'}, 
+                 {'X', 'X', 'O', 'O'}}
+          Output: 
+          ans = {{'X', 'X', 'X', 'X'}, 
+                 {'X', 'X', 'X', 'X'}, 
+                 {'X', 'X', 'X', 'X'}, 
+                 {'X', 'X', 'X', 'X'}, 
+                 {'X', 'X', 'O', 'O'}}
+          Explanation: 
+          Following the rule the above matrix is the resultant matrix. 
+
+Soltuion :
+
+void dfs(int row,int col,vector<vector<int>>& visited,vector<vector<char>>& mat,int n,int m,int delrow[],int delcol[]){
+        visited[row][col]=1;
+        
+        for(int i=0;i<4;i++){
+            int nrow=row+delrow[i];
+            int ncol=col+delcol[i];
+            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && visited[nrow][ncol]==0 && mat[nrow][ncol]=='O'){
+                //visited[nrow][ncol]=1;
+                dfs(nrow,ncol,visited,mat,n,m,delrow,delcol);
+            }
+        }
+    }
+    vector<vector<char>> fill(int n, int m, vector<vector<char>> mat)
+    {
+        vector<vector<int>> visited(n,vector<int>(m,0));
+        int delrow[]={-1,0,1,0};
+        int delcol[]={0,1,0,-1};
+        for(int j=0;j<m;j++){
+            //1st row
+            if(mat[0][j]=='O' && visited[0][j]==0){
+                dfs(0,j,visited,mat,n,m,delrow,delcol);
+            }
+            //last col
+            if(mat[n-1][j]=='O' && visited[n-1][j]==0){
+                dfs(n-1,j,visited,mat,n,m,delrow,delcol);
+            }
+        }
+        
+        for(int i=0;i<n;i++){
+            //1st col
+            if(mat[i][0]=='O' && visited[i][0]==0){
+                dfs(i,0,visited,mat,n,m,delrow,delcol);
+            }
+            //last col
+            if(mat[i][m-1]=='O' && visited[i][m-1]==0){
+                dfs(i,m-1,visited,mat,n,m,delrow,delcol);
+            }
+        }
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(visited[i][j]==0 && mat[i][j]=='O')
+                    mat[i][j]='X';
+            }
+        }
+        return mat;
+    }
