@@ -1,0 +1,37 @@
+Problem : Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, check whether it contains any cycle or not.
+
+          Example 1:
+          Input: 0->1,1->2,2->3,3->3
+          Output: 1
+          Explanation: 3 -> 3 is a cycle
+
+Solution :
+
+bool DFSdetectCycle(int src,vector<int> adj[],vector<int>& visited,vector<int>& pathVisited){
+        visited[src]=1;
+        pathVisited[src]=1;
+        for(auto it:adj[src]){
+            if(!visited[it]){
+                if(DFSdetectCycle(it,adj,visited,pathVisited)){
+                    return true;
+                }
+            }
+            else if(pathVisited[it]){
+                return true;
+            }
+        }
+        pathVisited[src]=0;
+        return false;
+    }
+    bool isCyclic(int V, vector<int> adj[]) {
+        vector<int> visited(V,0);
+        vector<int> pathVisited(V,0);
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                if(DFSdetectCycle(i,adj,visited,pathVisited)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
