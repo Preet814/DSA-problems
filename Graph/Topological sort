@@ -1,0 +1,46 @@
+Problem : Given a Directed Acyclic Graph (DAG) with V vertices and E edges, Find any Topological Sorting of that Graph.
+
+          Example 1:
+          Input:
+          0->{}
+          1->{0}
+          2->{0}
+          3->{0}
+          Output:
+          1
+          Explanation:
+          The output 1 denotes that the order is
+          valid. So, if you have, implemented
+          your function correctly, then output
+          would be 1 for all test cases.
+          One possible Topological order for the
+          graph is 3, 2, 1, 0.
+
+Solution :
+
+void dfs(int i,vector<int> adj[],vector<int>& visited,stack<int>& st){
+	    visited[i]=1;
+	    for(auto it:adj[i]){
+	        if(!visited[it]){
+	            dfs(it,adj,visited,st);
+	        }
+	    }
+	    st.push(i);
+	}
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int> ans;
+	    stack<int> st;
+	    vector<int> visited(V,0);
+	    for(int i=0;i<V;i++){
+	        if(!visited[i]){
+	            dfs(i,adj,visited,st);
+	        }
+	    }
+	    while(!st.empty()){
+	        int value=st.top();
+	        ans.push_back(value);
+	        st.pop();
+	    }
+	    return ans;
+	}
