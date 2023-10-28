@@ -27,6 +27,7 @@ void dfs(int i,vector<int> adj[],vector<int>& visited,stack<int>& st){
 	    }
 	    st.push(i);
 	}
+	
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
 	    vector<int> ans;
@@ -43,4 +44,32 @@ void dfs(int i,vector<int> adj[],vector<int>& visited,stack<int>& st){
 	        st.pop();
 	    }
 	    return ans;
-	}
+	   
+	   // BFS methid also called Kahn's algo
+	   
+// 	   vector<int> inDeg(V,0);
+// 	   for(int i=0;i<V;i++){
+// 	       for(auto it:adj[i]){
+// 	           inDeg[it]++;
+// 	       }
+// 	   }
+// 	   queue<int> q;
+// 	   for(int i=0;i<V;i++){
+// 	       if(inDeg[i]==0){
+// 	           q.push(i);
+// 	       }
+// 	   }
+// 	   vector<int> topo;
+// 	   while(!q.empty()){
+// 	       int node=q.front();
+// 	       q.pop();
+// 	       topo.push_back(node);
+// 	       for(auto it:adj[node]){
+// 	           inDeg[it]--;
+// 	           if(inDeg[it]==0){
+// 	               q.push(it);
+// 	           }
+// 	       }
+// 	   }
+// 	   return topo;
+ 	}
