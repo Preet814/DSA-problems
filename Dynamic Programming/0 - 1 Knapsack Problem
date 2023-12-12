@@ -1,0 +1,114 @@
+Problem : You are given weights and values of N items, put these items in a knapsack of capacity W to get the maximum total value in the knapsack. Note that we have only one 
+          quantity of each item.
+          In other words, given two integer arrays val[0..N-1] and wt[0..N-1] which represent values and weights associated with N items respectively. Also given 
+          an integer W which represents knapsack capacity, find out the maximum value subset of val[] such that sum of the weights of this subset is smaller than 
+          or equal to W. You cannot break an item, either pick the complete item or dont pick it (0-1 property).
+          
+          Example 1:
+          
+          Input:
+          N = 3
+          W = 4
+          values[] = {1,2,3}
+          weight[] = {4,5,1}
+          Output: 3
+          Explanation: Choose the last item that weighs 1 unit and holds a value of 3. 
+
+Solution :
+
+int solve(int wt[], int val[], int index, int capacity,vector<vector<int>>& dp){
+        //base case
+        if(index==0){
+            if(wt[index]<=capacity){
+                return val[index];
+            }
+            else{
+                return 0;
+            }
+        }
+        if(dp[index][capacity]!=-1){
+            return dp[index][capacity];
+        }
+        int include=0;
+        if(wt[index]<=capacity){
+            include=val[index]+solve(wt,val,index-1,capacity-wt[index],dp);
+        }
+        int exclude=solve(wt,val,index-1,capacity,dp);
+        dp[index][capacity]=max(include,exclude);
+        return dp[index][capacity];
+    }
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+        // recursion + memoization
+        // vector<vector<int>> dp(n,vector<int>(W+1,-1));
+        // return solve(wt,val,n-1,W,dp);
+        
+        // tabulation
+        // vector<vector<int>> dp(n,vector<int>(W+1,0));
+        // for(int w=wt[0];w<=W;w++){
+        //     if(wt[0]<=W){
+        //         dp[0][w]=val[0];
+        //     }
+        //     else{
+        //         dp[0][w]=0;
+        //     }
+        // }
+        // for(int index=1;index<n;index++){
+        //     for(int capacity=0;capacity<=W;capacity++){
+        //         int include=0;
+        //         if(wt[index]<=capacity){
+        //             include=val[index]+dp[index-1][capacity-wt[index]];
+        //         }
+        //         int exclude=dp[index-1][capacity];
+        //         dp[index][capacity]=max(include,exclude);
+        //     }
+        // }
+        // return dp[n-1][W];
+        
+        //space optimization
+        // vector<int> prev(W+1,0);
+        // vector<int> curr(W+1,0);
+        // for(int w=wt[0];w<=W;w++){
+        //     if(wt[0]<=W){
+        //         prev[w]=val[0];
+        //     }
+        //     else{
+        //         prev[w]=0;
+        //     }
+        // }
+        // for(int index=1;index<n;index++){
+        //     for(int capacity=0;capacity<=W;capacity++){
+        //         int include=0;
+        //         if(wt[index]<=capacity){
+        //             include=val[index]+prev[capacity-wt[index]];
+        //         }
+        //         int exclude=prev[capacity];
+        //         curr[capacity]=max(include,exclude);
+        //     }
+        //     prev=curr;
+        // }
+        // return prev[W];
+        
+        // space optimized using 1 array only
+        // vector<int> curr(W+1,0);
+        // for(int w=wt[0];w<=W;w++){
+        //     if(wt[0]<=W){
+        //         curr[w]=val[0];
+        //     }
+        //     else{
+        //         curr[w]=0;
+        //     }
+        // }
+        // for(int index=1;index<n;index++){
+        //     for(int capacity=W;capacity>=0;capacity--){
+        //         int include=0;
+        //         if(wt[index]<=capacity){
+        //             include=val[index]+curr[capacity-wt[index]];
+        //         }
+        //         int exclude=curr[capacity];
+        //         curr[capacity]=max(include,exclude);
+        //     }
+        // }
+        // return curr[W];
+    }
+
