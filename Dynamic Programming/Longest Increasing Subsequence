@@ -1,0 +1,33 @@
+Problem : Given an array of integers, find the length of the longest (strictly) increasing subsequence from the given array.
+
+Example 1:
+Input:
+N = 6
+A[] = {5,8,3,7,9,1}
+Output: 
+3
+Explanation:
+There are more than one LIS in this array.  One such Longest increasing subsequence is {5,7,9}.
+
+Solution :
+
+int solveOptimal(int n,int nums[]){
+        if(n==0)
+            return 0;
+        vector<int> ans;
+        ans.push_back(nums[0]);
+        for(int i=1;i<n;i++){
+            if(nums[i]>ans.back())
+                ans.push_back(nums[i]);
+            else{
+                int index=lower_bound(ans.begin(),ans.end(),nums[i])-ans.begin();
+                ans[index]=nums[i];
+            }
+        }
+        return ans.size();
+    }
+    //Function to find length of longest increasing subsequence.
+    int longestSubsequence(int n, int nums[])
+    {
+        return solveOptimal(n,nums);
+    }
