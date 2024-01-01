@@ -1,0 +1,72 @@
+Problem : Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+
+          Example 1:
+          Input: nums = [1,5,11,5]
+          Output: true
+          Explanation: The array can be partitioned as [1, 5, 5] and [11].
+
+Solution :
+
+bool solve(int index,vector<int>& nums,int sum,int total,vector<vector<int>>& dp){
+        if(sum>total)
+            return false;
+        if(index>=nums.size())
+            return false;
+        if(sum==total)
+            return true;
+        if(dp[index][sum]!=-1)
+            return dp[index][sum];
+        int include=solve(index+1,nums,sum+nums[index],total,dp);
+        int exclude=solve(index+1,nums,sum,total,dp);
+        return dp[index][sum]=include||exclude;
+    }
+    bool canPartition(vector<int>& nums) {
+        int sum=0;
+        for(auto i:nums){
+            sum=sum+i;
+        }
+        if(sum%2!=0)
+            return false;
+        // recursion + memoization
+        // int n=nums.size();
+        // int total=sum/2;
+        // vector<vector<int>> dp(n,vector<int>(total+1,-1));
+        // return solve(0,nums,0,total,dp);
+
+        // tabulation
+        // int n=nums.size();
+        // int total=sum/2;
+        // vector<vector<int>> dp(n+1,vector<int>(total+1,0));
+        // for(int i=0;i<=n;i++){
+        //     dp[i][0]=1;
+        // }
+        // for(int index=n-1;index>=0;index--){
+        //     for(int sum=1;sum<=total;sum++){
+        //         bool include=0;
+        //         if(sum-nums[index]>=0)
+        //             include=dp[index+1][sum-nums[index]];
+        //         bool exclude=dp[index+1][sum];
+        //         dp[index][sum]=include||exclude;
+        //     }
+        // }
+        // return dp[0][total];
+
+        // space optimization
+        int n=nums.size();
+        int total=sum/2;
+        vector<int> curr(total+1,0);
+        vector<int> next(total+1,0);
+        curr[0]=1;
+        next[0]=1;
+        for(int index=n-1;index>=0;index--){
+            for(int sum=1;sum<=total;sum++){
+                bool include=0;
+                if(sum-nums[index]>=0)
+                    include=next[sum-nums[index]];
+                bool exclude=next[sum];
+                curr[sum]=include||exclude;
+            }
+            next=curr;
+        }
+        return next[total];
+    }
