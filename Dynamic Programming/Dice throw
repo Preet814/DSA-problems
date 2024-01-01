@@ -1,0 +1,72 @@
+Problem : Given N dice each with M faces, numbered from 1 to M, find the number of ways to get sum X. X is the summation of values on each face when all the dice are thrown.
+
+          Example 1:
+          Input:
+          M = 6, N = 3, X = 12
+          Output:
+          25
+          Explanation:
+          There are 25 total ways to get
+          the Sum 12 using 3 dices with
+          faces from 1 to 6.
+
+Solution :
+
+class Solution {
+public:
+    const int mod = (int)pow(10, 9) + 7;
+    int solve(int dice,int faces,int target,vector<vector<int>>& dp){
+        if(target<0)
+            return 0;
+        if(target==0 && dice!=0)
+            return 0;
+        if(target!=0 && dice==0)
+            return 0;
+        if(target==0 && dice==0)
+            return 1;
+        if(dp[dice][target]!=-1)
+            return dp[dice][target];
+        int ans=0;
+        for(int i=1;i<=faces;i++){
+            ans=(ans+solve(dice-1,faces,target-i,dp))%mod;
+        }
+        return dp[dice][target]=ans%mod;
+    }
+    int numRollsToTarget(int n, int k, int target) {
+        // recursion + memoization
+        // vector<vector<int>> dp(n+1,vector<int>(target+1,-1));
+        // return solve(n,k,target,dp);
+
+        // tabulation
+        // vector<vector<int>> dp(n+1,vector<int>(target+1,0));
+        // dp[0][0]=1;
+        // for(int dice=1;dice<=n;dice++){
+        //     for(int t=1;t<=target;t++){
+        //         int ans=0;
+        //         for(int i=1;i<=k;i++){
+        //             if(t-i>=0)
+        //                 ans=(ans+dp[dice-1][t-i])%mod;
+        //         }
+        //         dp[dice][t]=ans%mod;
+        //     }
+        // }
+        // return dp[n][target];
+
+        // space optimization
+        vector<int> curr(target+1,0);
+        vector<int> prev(target+1,0);
+        prev[0]=1;
+        for(int dice=1;dice<=n;dice++){
+            for(int t=1;t<=target;t++){
+                int ans=0;
+                for(int i=1;i<=k;i++){
+                    if(t-i>=0)
+                        ans=(ans+prev[t-i])%mod;
+                }
+                curr[t]=ans%mod;
+            }
+            prev=curr;
+        }
+        return prev[target];
+    }
+};
