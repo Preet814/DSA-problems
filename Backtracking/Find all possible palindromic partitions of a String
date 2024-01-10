@@ -1,0 +1,50 @@
+Problem : Given a String S, Find all possible Palindromic partitions of the given String.
+          
+          Example 1:
+          Input:
+          S = "geeks"
+          Output:
+          g e e k s
+          g ee k s
+          Explanation:
+          All possible palindromic partitions
+          are printed.
+
+Solution : 
+
+bool checkPalindrome(string& S){
+      int n=S.size();
+      int i=0,j=n-1;
+      while(i<j){
+          if(S[i]!=S[j]){
+            return false;
+          }
+              i++;
+              j--;
+          }
+        return true;  
+      
+  }
+    void partition(vector<vector<string>>& res,string& S,int idx,vector<string>& curr){
+      if(idx==S.size()){
+          res.push_back(curr);
+          return;
+      }
+      string t;
+      for(int i=idx;i<S.size();i++){
+          t.push_back(S[i]);
+          if(checkPalindrome(t)){
+              curr.push_back(t);
+              partition(res,S,i+1,curr);
+              curr.pop_back();
+          }
+      }
+      
+  }
+
+    vector<vector<string>> allPalindromicPerms(string S) {
+        vector<vector<string>> res;
+        vector<string> curr;
+        partition(res,S,0,curr);
+        return res;
+    }
