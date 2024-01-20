@@ -1,0 +1,61 @@
+Problem : You are given two 0-indexed strings source and target, both of length n and consisting of lowercase English letters. 
+          You are also given two 0-indexed character arrays original and changed, and an integer array cost, where cost[i] 
+          represents the cost of changing the character original[i] to the character changed[i].
+          You start with the string source. In one operation, you can pick a character x from the string and change it to 
+          the character y at a cost of z if there exists any index j such that cost[j] == z, original[j] == x, and 
+          changed[j] == y.
+          Return the minimum cost to convert the string source to the string target using any number of operations. 
+          If it is impossible to convert source to target, return -1.
+          Note that there may exist indices i, j such that original[j] == original[i] and changed[j] == changed[i].
+          
+          Example 1:
+          Input: source = "abcd", target = "acbe", original = ["a","b","c","c","e","d"], 
+          changed = ["b","c","b","e","b","e"], cost = [2,5,5,1,2,20]
+          Output: 28
+          Explanation: To convert the string "abcd" to string "acbe":
+          - Change value at index 1 from 'b' to 'c' at a cost of 5.
+          - Change value at index 2 from 'c' to 'e' at a cost of 1.
+          - Change value at index 2 from 'e' to 'b' at a cost of 2.
+          - Change value at index 3 from 'd' to 'e' at a cost of 20.
+          The total cost incurred is 5 + 1 + 2 + 20 = 28.
+          It can be shown that this is the minimum possible cost.
+
+Solution : 
+
+class Solution {
+public:
+    long long minimumCost(string source, string target, vector<char>& original, vector<char>& changed, vector<int>& cost) {
+        // this problem can be solved from floyd warshall algo: gives shortest path from single node to other remaining nodes
+        int n=original.size();
+        vector<vector<int>> matrix(26,vector<int>(26,1e8));
+        // matrix is a 2-D vector which will store shortest path from 1 node to all other nodes
+        // no loop so making i to i cost 0
+        for(int i=0;i<26;i++){
+            matrix[i][i]=0;
+        }
+        // pushing values in matrix, here min is used so data may not overflow
+        for(int i=0;i<n;i++){
+            matrix[original[i]-'a'][changed[i]-'a']=min(matrix[original[i]-'a'][changed[i]-'a'],cost[i]);
+        }
+
+        // floyd warshall main algo here
+        for(int via=0;via<26;via++){
+	        for(int i=0;i<26;i++){
+	            for(int j=0;j<26;j++){
+	                matrix[i][j]=min(matrix[i][j],matrix[i][via]+matrix[via][j]);
+	            }
+	        }
+	    }
+        long long ans=0;
+        // ans is calculated 
+        for(int i=0;i<source.size();i++){
+            // here the case where the original char can't be changed into changed char so returning -1 as said in problem
+            if(matrix[source[i] - 'a'][target[i] - 'a'] >= 1e8) 
+                return -1;
+            if(source[i]!=target[i]){
+                ans+=matrix[source[i]-'a'][target[i]-'a'];
+            }
+        }
+        return ans;
+    }
+};
