@@ -1,0 +1,39 @@
+Problem : Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated 
+          sequence of one or more dictionary words.
+          Note that the same word in the dictionary may be reused multiple times in the segmentation.
+          
+          Example 1:
+          Input: s = "leetcode", wordDict = ["leet","code"]
+          Output: true
+          Explanation: Return true because "leetcode" can be segmented as "leet code".
+
+Solution : 
+
+class Solution {
+public:
+    bool solve(int idx,string s,set<string>& st,vector<int>& dp){
+        if(idx>=s.length()){
+            return true;
+        }
+        if(dp[idx]!=-1)
+            return dp[idx];
+        string currStr="";
+        for(int i=idx;i<s.length();i++){
+            currStr+=s[i];
+            if(st.find(currStr)!=st.end()){
+                if(solve(i+1,s,st,dp))
+                    return dp[idx]=true;
+            }
+        }
+        return dp[idx]=false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int index=0;
+        set<string> st;
+        for(auto it:wordDict){
+            st.insert(it);
+        }
+        vector<int> dp(s.length(),-1);
+        return solve(index,s,st,dp);
+    }
+};
