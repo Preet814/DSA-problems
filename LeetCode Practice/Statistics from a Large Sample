@@ -1,0 +1,96 @@
+Problem : You are given a large sample of integers in the range [0, 255]. Since the sample is so large, it is represented by an array count where count[k] is the 
+          number of times that k appears in the sample.
+          Calculate the following statistics:
+          minimum: The minimum element in the sample.
+          maximum: The maximum element in the sample.
+          mean: The average of the sample, calculated as the total sum of all elements divided by the total number of elements.
+          median:
+          If the sample has an odd number of elements, then the median is the middle element once the sample is sorted.
+          If the sample has an even number of elements, then the median is the average of the two middle elements once the sample 
+          is sorted.
+          mode: The number that appears the most in the sample. It is guaranteed to be unique.
+          Return the statistics of the sample as an array of floating-point numbers [minimum, maximum, mean, median, mode]. 
+          Answers within 10-5 of the actual answer will be accepted.
+          
+          Example 1:
+          Input: count = [0,1,3,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          Output: [1.00000,3.00000,2.37500,2.50000,3.00000]
+          Explanation: The sample represented by count is [1,2,2,2,3,3,3,3].
+          The minimum and maximum are 1 and 3 respectively.
+          The mean is (1+2+2+2+3+3+3+3) / 8 = 19 / 8 = 2.375.
+          Since the size of the sample is even, the median is the average of the two middle elements 2 and 3, which is 2.5.
+          The mode is 3 as it appears the most in the sample.
+
+Solution : 
+
+class Solution {
+public:
+    vector<double> sampleStats(vector<int>& count) {
+            vector<double>ans(5,0);
+            long long  maxi = 0;
+            long long mini = 255;
+            long long mode=0;
+            double moden;
+            long long sumi=0;
+            long long n=0;
+            for(long long i=0;i<256;i++){
+
+                if(mode<count[i]){
+                    mode=count[i];
+                    moden=i;
+                }
+
+                if(count[i]>0){
+                    sumi+=(i*count[i]);
+                    n+=count[i];
+                    maxi = max(maxi,i);
+                    mini = min(mini,i);
+                }
+
+            }
+            double median=-1;
+            long long m=0;
+           if(n%2==0){
+               long long k1 = n/2;
+                long long k2 = n/2+1;
+            //    cout<<k1<<" "<<k2<<endl;
+               double med1=-1;
+               double med2=-1;
+                for( long long i=0;i<256;i++){
+                    m+=count[i];
+                     if(m>=k1&&m-count[i]<=k1){
+                        if(med1==-1)
+                            med1=i;
+                    }
+                     if(m>=k2&&m-count[i]<=k2){
+                        if(med2==-1)
+                            med2=i;
+                    }
+                }
+                median = (double)(med1+med2)/(double)2;
+
+           }else{
+                long long k = n/2+1;
+                for( long long i=0;i<256;i++){
+                    m+=count[i];
+                    if(m>=k&&m-count[i]<=k){
+                        if(median==-1)
+                        median=i;
+                    }
+                }
+
+           }
+        //    cout<<n;
+            ans[0]=mini;
+            ans[1]=maxi;
+            ans[2]=(double)sumi/(double)n;
+            ans[4]=moden;
+            ans[3]=median;
+
+            return ans;
+    }
+};
