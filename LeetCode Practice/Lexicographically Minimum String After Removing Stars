@@ -1,0 +1,53 @@
+Problem : You are given a string s. It may contain any number of '*' characters. Your task is to remove all '*' characters.
+          While there is a '*', do the following operation:
+          Delete the leftmost '*' and the smallest non-'*' character to its left. If there are several smallest characters, you 
+          can delete any of them.
+          Return the lexicographically smallest resulting string after removing all '*' characters.
+          
+          Example 1:
+          Input: s = "aaba*"
+          Output: "aab"
+          Explanation:
+          We should delete one of the 'a' characters with '*'. If we choose s[3], s becomes the lexicographically smallest.
+
+Solution : 
+
+class Solution {
+    struct info{
+        char ch;
+        int idx;
+    };
+    struct comp{
+        bool operator()(const info&e1, const info&e2)const{
+            if (e1.ch==e2.ch){
+                return e1.idx < e2.idx;
+            }
+            return e1.ch > e2.ch;
+        }
+    };
+public:
+    string clearStars(string s) {
+        string ans;
+        int n=s.length();
+        info temp;
+        priority_queue<info,vector<info>,comp> pq;
+        for(int i=0;i<n;i++){
+            if(s[i]=='*'){
+                if(!pq.empty()){
+                    temp=pq.top();
+                    pq.pop();
+                    s[temp.idx]='*';
+                }
+                continue;
+            }
+            temp.ch=s[i];
+            temp.idx=i;
+            pq.push(temp);
+        }
+        for(int i=0;i<s.length();i++){
+            if(s[i]!='*')
+                ans+=s[i];
+        }
+        return ans;
+    }
+};
