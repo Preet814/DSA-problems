@@ -1,0 +1,38 @@
+Problem : You are given two integers red and blue representing the count of red and blue colored balls. You have to arrange 
+          these balls to form a triangle such that the 1st row will have 1 ball, the 2nd row will have 2 balls, the 3rd row will 
+          have 3 balls, and so on.
+          All the balls in a particular row should be the same color, and adjacent rows should have different colors.
+          Return the maximum height of the triangle that can be achieved.
+          
+          Example 1:
+          Input: red = 2, blue = 4
+          Output: 3
+
+Solution : 
+
+class Solution {
+public:
+    int solve(int root,int nonRoot,int len){
+        int maxi=0;
+        int i=1;
+        while(true){
+            if(i%2!=0){
+                root=root-i;
+            }
+            else{
+                nonRoot=nonRoot-i;
+            }
+            if(root<0 || nonRoot<0)
+                break;
+            maxi++;
+            i++;
+        }
+        return maxi;
+    }
+    int maxHeightOfTriangle(int red, int blue) {
+        int len=max(red,blue);
+        int ans1=solve(red,blue,len);
+        int ans2=solve(blue,red,len);
+        return max(ans1,ans2);
+    }
+};
