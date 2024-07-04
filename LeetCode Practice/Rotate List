@@ -1,0 +1,45 @@
+Problem : Given the head of a linked list, rotate the list to the right by k places.
+
+          Example 1:
+          Input: head = [1,2,3,4,5], k = 2
+          Output: [4,5,1,2,3]
+
+Solution : 
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL)
+            return NULL;
+        if(k==0)
+            return head;
+        ListNode* curr=head;
+        ListNode* prev=head;
+        int cnt=1;
+        while(prev->next!=NULL){
+            prev=prev->next;
+            cnt++;
+        }
+        prev->next=curr;
+        if(k>cnt){
+            k=k%cnt;
+        }
+        int newNum=abs(cnt-k);
+        while(newNum--){
+            prev=curr;
+            curr=curr->next;
+        }
+        prev->next=NULL;
+        return curr;
+    }
+};
