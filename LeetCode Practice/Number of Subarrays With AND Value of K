@@ -1,0 +1,33 @@
+Problem : Given an array of integers nums and an integer k, return the number of subarrays of nums where the bitwise AND of 
+          the elements of the subarray equals k. 
+          
+          Example 1:
+          Input: nums = [1,1,1], k = 1
+          Output: 6
+
+Solution : 
+
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int k) {
+        int n=nums.size();
+        long long cnt=0;
+        map<long long,long long> prev;
+        for(int i=0;i<n;i++){
+            map<long long,long long> curr;
+            if(nums[i]==k){
+                cnt++;
+            }
+            curr[nums[i]]=1;
+            for(auto it:prev){
+                long long res=it.first&nums[i];
+                if(res==k){
+                    cnt+=it.second;
+                }
+                curr[res]+=it.second;
+            }
+            prev=curr;
+        }
+        return cnt;
+    }
+};
