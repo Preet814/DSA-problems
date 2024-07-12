@@ -1,0 +1,36 @@
+Problem : Given a 0-indexed n x n integer matrix grid, return the number of pairs (ri, cj) such that row ri and column cj are 
+          equal.
+          A row and column pair is considered equal if they contain the same elements in the same order (i.e., an equal array).
+          
+          Example 1:
+          Input: grid = [[3,2,1],[1,7,6],[2,7,7]]
+          Output: 1
+          Explanation: There is 1 equal row and column pair:
+          - (Row 2, Column 1): [2,7,7]
+
+Solution : 
+
+class Solution {
+public:
+    int equalPairs(vector<vector<int>>& grid) {
+        int row=grid.size();
+        int col=grid[0].size();
+        map<vector<int>,int> mp1,mp2;
+        for(int i=0;i<row;i++){
+            vector<int> arr1,arr2;
+            for(int j=0;j<col;j++){
+                arr1.push_back(grid[i][j]);
+                arr2.push_back(grid[j][i]);
+            }
+            mp1[arr1]++;
+            mp2[arr2]++;
+        }
+        int ans=0;
+        for(auto it:mp1){
+            if(mp2.find(it.first)!=mp2.end()){
+                ans+=it.second*(mp2[it.first]);
+            }
+        }
+        return ans;
+    }
+};
