@@ -1,0 +1,78 @@
+Problem : Given a string formula representing a chemical formula, return the count of each atom.
+          The atomic element always starts with an uppercase character, then zero or more lowercase letters, representing 
+          the name.
+          One or more digits representing that element's count may follow if the count is greater than 1. If the count is 
+          1, no digits will follow.
+          For example, "H2O" and "H2O2" are possible, but "H1O2" is impossible.
+          Two formulas are concatenated together to produce another formula.
+          For example, "H2O2He3Mg4" is also a formula.
+          A formula placed in parentheses, and a count (optionally added) is also a formula.
+          For example, "(H2O2)" and "(H2O2)3" are formulas.
+          Return the count of all elements as a string in the following form: the first name (in sorted order), followed 
+          by its count (if that count is more than 1), followed by the second name (in sorted order), followed by its count 
+          (if that count is more than 1), and so on.
+          The test cases are generated so that all the values in the output fit in a 32-bit integer. 
+          
+          Example 1:
+          Input: formula = "H2O"
+          Output: "H2O"
+          Explanation: The count of elements are {'H': 2, 'O': 1}.
+
+Solution :  
+
+class Solution {
+public:
+    string countOfAtoms(string formula) {
+        int n=formula.size();
+        stack<map<string,int>> st;
+        st.push({});
+        int i=0;
+        while(i<n){
+            if(formula[i]=='('){
+                st.push({});
+                i++;
+            }
+            else if(formula[i]==')'){
+                map<string,int> mp=st.top();
+                st.pop();
+                i++;
+                int start=i;
+                while(i<n && isdigit(formula[i])){
+                    i++;
+                }
+                int cnt=start<i ? stoi(formula.substr(start,i-start)) : 1;
+                for(auto it:mp){
+                    st.top()[it.first]+=it.second*cnt;
+                }
+            }
+            else{
+                int start=i++;
+                while(i<n && islower(formula[i])){
+                    i++;
+                }
+                string s=formula.substr(start,i-start);
+                start=i;
+                while(i<n && isdigit(formula[i])){
+                    i++;
+                }
+                int cnt=start<i ? stoi(formula.substr(start,i-start)) : 1;
+                st.top()[s]+=cnt;
+            }
+        }
+        map<string,int> result=st.top();
+        st.pop();
+        vector<string> str;
+        string ans;
+        for(auto it:result){
+            str.push_back(it.first);
+        }
+        sort(str.begin(),str.end());
+        for(int i=0;i<str.size();i++){
+            ans+=str[i];
+            if(result[str[i]]>1){
+                ans+=to_string(result[str[i]]);
+            }
+        }
+        return ans;
+    }
+};
