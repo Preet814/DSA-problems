@@ -1,0 +1,70 @@
+Problem : You are given an m x n matrix maze (0-indexed) with empty cells (represented as '.') and walls (represented as '+'). 
+          You are also given the entrance of the maze, where entrance = [entrancerow, entrancecol] denotes the row and 
+          column of the cell you are initially standing at.
+          In one step, you can move one cell up, down, left, or right. You cannot step into a cell with a wall, and you 
+          cannot step outside the maze. Your goal is to find the nearest exit from the entrance. An exit is defined as 
+          an empty cell that is at the border of the maze. The entrance does not count as an exit.
+          Return the number of steps in the shortest path from the entrance to the nearest exit, or -1 if no such path exists.
+          
+          Example 1:
+          Input: maze = [["+","+",".","+"],[".",".",".","+"],["+","+","+","."]], entrance = [1,2]
+          Output: 1
+          Explanation: There are 3 exits in this maze at [1,0], [0,2], and [2,3].
+          Initially, you are at the entrance cell [1,2].
+          - You can reach [1,0] by moving 2 steps left.
+          - You can reach [0,2] by moving 1 step up.
+          It is impossible to reach [2,3] from the entrance.
+          Thus, the nearest exit is [0,2], which is 1 step away.
+
+Solution : 
+
+class Solution {
+public:
+    bool isValid(vector<vector<char>>& arr, vector<vector<bool>>& vis, int i,
+                 int j, int m, int n) {
+        if (i >= 0 and i < n and j >= 0 and j < m and !vis[i][j] and
+            arr[i][j] == '.') {
+            return true;
+        }
+        return false;
+    }
+    int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {
+        int n = maze.size();
+        int m = maze[0].size();
+        queue<pair<pair<int, int>, int>> q;
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        q.push({{entrance[0], entrance[1]}, 0});
+        visited[entrance[0]][entrance[1]] = true;
+        int delR[] = {1, 0, -1, 0};
+        int delC[] = {0, 1, 0, -1};
+        int mini = INT_MIN;
+        while (!q.empty()) {
+            auto temp = q.front();
+            q.pop();
+            int r = temp.first.first;
+            int c = temp.first.second;
+            int step = temp.second;
+            if ((r == 0 || r == n - 1 || c == 0 || c == m - 1) &&
+                maze[r][c] == '.') {
+                if (r == entrance[0] && c == entrance[1]) {
+
+                } else {
+                    mini = step;
+                    break;
+                }
+            }
+            for (int i = 0; i < 4; i++) {
+                int nr = r + delR[i];
+                int nc = c + delC[i];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m &&
+                    !visited[nr][nc] && maze[nr][nc] != '+') {
+                    visited[nr][nc] = true;
+                    q.push({{nr, nc}, step + 1});
+                }
+            }
+        }
+        if (mini == INT_MIN)
+            return -1;
+        return mini;
+    }
+};
