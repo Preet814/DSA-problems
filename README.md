@@ -1,4 +1,5 @@
 **IP Address:** 205.11.2.0
+
 **Class C IP Address**
 
 **What is the subnet mask for the maximum number of hosts?**
@@ -30,5 +31,8 @@ subnet 2 - **205.11.2.8 to 205.11.2.15** 1st usable host is **205.11.2.9** So th
 
 
 **Subnet Mask :** 255.255.255.248
+
 **Number of valid hosts per subnet :** 6
+
 **Host 3 on subnet 2 :** 205.11.2.11
+
