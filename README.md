@@ -17,31 +17,51 @@ Number of host id per subnet 2^13 - 2 = 8190 addresses (2 are subtracted one for
 Block size of third octate is calculated by 8192 / 256 = 32. So start of network range would be 192.168.0.0 to 192.168.31.255
 
 **Project 1:**
+
 Network Address: 192.168.0.0/19
+
 Broadcast Address: 192.168.31.255/19
+
 First Usable host address: 192.168.0.1/19
+
 Last Usable Host address: 192.168.31.254/19
 
 **Project 2:**
+
 Network Address: 192.168.32.0/19
+
 Broadcast Address: 192.168.63.255/19
+
 First Usable host address: 192.168.32.1/19
+
 Last Usable Host address: 192.168.63.254/19
 
 **Project 3:**
+
 Network Address: 192.168.64.0/19
+
 Broadcast Address: 192.168.95.255/19
+
 First Usable host address: 192.168.64.1/19
+
 Last Usable Host address: 192.168.95.254/19
 
 **Project 4:**
+
 Network Address: 192.168.96.0/19
+
 Broadcast Address: 192.168.127.255/19
+
 First Usable host address: 192.168.96.1/19
+
 Last Usable Host address: 192.168.127.254/19
 
 **Project 5:**
+
 Network Address: 192.168.128.0/19
+
 Broadcast Address: 192.168.159.255/19
+
 First Usable host address: 192.168.128.1/19
+
 Last Usable Host address: 192.168.159.254/19
