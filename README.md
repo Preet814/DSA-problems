@@ -1,38 +1,47 @@
-**IP Address:** 205.11.2.0
+**Address Block: 192.168.0.0/16**
+**Subnetting need to be implemented for assigning network to 5 different projects**
 
-**Class C IP Address**
+IP Address: 192.168.0.0 
+Class C subnet mask : 255.255.0.0 or 11111111.11111111.00000000.00000000
+Subnetting done for 5 projects or we can say 5 subnets are to be created so to find smallest subnet size that can accomodate atleast 5 networks is 
 
-**What is the subnet mask for the maximum number of hosts?**
+# 2^n >= 5 
 
-Our task is to create **30 subnets** for class C IP Address starting 24 bits are used for network id, now from remaining 8 bits for creating 30 subnets **5 bits** will be sufficient as 2^5 is 32 subnets.
-Accordingly 24 bits from network id and 5 bits from host id leads to a subnet mask of **11111111.11111111.11111111.11111000** or **255.255.255.248**
+So n = 3 so 3 bits from host id of subnet mask needs to set to 1. New subnet mask would be 
 
+# 11111111.11111111.11100000.00000000  or  255.255.224.0
 
-**How many hosts can each subnet have?**
+Number of network id 2^3 = 8 but we need only 5 for our projects
+Number of host id per subnet 2^13 - 2 = 8190 addresses (2 are subtracted one for network address and another for broadcast address). So usable host id addresses per subnet are 8190. Increment of 8190 host ids per ip address.
 
-Now to calculate valid host for each subnet we have a formula: **2^(number of host bits left after subnet masking) - 2**. Here difference of 2 is taken because 2 id's are used one by Subnet id and another by Direct Broadcast id.
-So number of host bits left are:
-Total bits = 32
-Bits used for subnetting = 29
-Bits left for valid Hosts = 3 = number of host bits
-so **(2^3) - 2 = 6** So **6 hosts available per subnet**
+Block size of third octate is calculated by 8192 / 256 = 32. So start of network range would be 192.168.0.0 to 192.168.31.255
 
+**Project 1:**
+Network Address: 192.168.0.0/19
+Broadcast Address: 192.168.31.255/19
+First Usable host address: 192.168.0.1/19
+Last Usable Host address: 192.168.31.254/19
 
-**What is the IP address of host 3 on subnet 2?**
+**Project 2:**
+Network Address: 192.168.32.0/19
+Broadcast Address: 192.168.63.255/19
+First Usable host address: 192.168.32.1/19
+Last Usable Host address: 192.168.63.254/19
 
-Now to find the subnet numbers our subnet mask is **255.255.255.248**. First thing to note that our octate does not equal to 255 or 0, our octate is equal to 248. Secondly to get the range of subnet to ip address 205.11.2.0 using our subnet mask 255.255.255.248 formula is: **256 - (octate value)**.
-So range is **256 - 248 = 8**
-Our first subnet would be in range of **205.11.2.0 - 205.11.2.7**
-Second subnet would be in range of **205.11.2.8 - 205.11.2.15**
-Third subnet would be in range of **205.11.2.16 - 205.11.2.23**
-So IP address of host 3 from subnet 2 would be:
-subnet 2 - **205.11.2.8 to 205.11.2.15** 1st usable host is **205.11.2.9** So the third usable host is **205.11.2.11**
+**Project 3:**
+Network Address: 192.168.64.0/19
+Broadcast Address: 192.168.95.255/19
+First Usable host address: 192.168.64.1/19
+Last Usable Host address: 192.168.95.254/19
 
+**Project 4:**
+Network Address: 192.168.96.0/19
+Broadcast Address: 192.168.127.255/19
+First Usable host address: 192.168.96.1/19
+Last Usable Host address: 192.168.127.254/19
 
-
-**Subnet Mask :** 255.255.255.248
-
-**Number of valid hosts per subnet :** 6
-
-**Host 3 on subnet 2 :** 205.11.2.11
-
+**Project 5:**
+Network Address: 192.168.128.0/19
+Broadcast Address: 192.168.159.255/19
+First Usable host address: 192.168.128.1/19
+Last Usable Host address: 192.168.159.254/19
