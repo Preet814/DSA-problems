@@ -35,30 +35,8 @@ Step 2. Choose trusted entity type (choose AWS account as per assignment).
 Step 3. Add permission according to the role (in my case i added an inline policy to start and stop ec2 instances and list all the instances) and add name to the role and policy.
 
 Inline policy attached to my role:
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "allowStartStopInstance",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:StartInstances",
-                "ec2:StopInstances"
-            ],
-            "Resource": [
-                "arn:aws:ec2:ap-south-1:<account_id>:instance/*"
-            ]
-        },
-        {
-            "Sid": "describeInstance",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeInstances"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
+![image](https://github.com/user-attachments/assets/fc03fbdd-6c93-48a5-b5c7-7d702a818866)
+
 
 **3. Attach role and policy to user by assume role:**
 
