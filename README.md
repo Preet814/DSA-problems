@@ -1,67 +1,80 @@
-**Address Block: 192.168.0.0/16**
-**Subnetting need to be implemented for assigning network to 5 different projects**
+**Assignment: Create Custom IAM role, policy and attach it to IAM user. Also enable MFA for that user**
 
-IP Address: 192.168.0.0 
-Class C subnet mask : 255.255.0.0 or 11111111.11111111.00000000.00000000
-Subnetting done for 5 projects or we can say 5 subnets are to be created so to find smallest subnet size that can accomodate atleast 5 networks is 
+Creating IAM User with permission to only list the s3 buckets. Later on adding a role where the user can start and stop the EC2 instances and list all the EC2 instances on dashboard by switching to the specified role. Lastly enabling MFA to the user.
 
-**2^n >= 5** 
+**1. Create IAM User:**
 
-So n = 3 so 3 bits from host id of subnet mask needs to set to 1. New subnet mask would be 
+Step 1. Search IAM on search bar of Amazon console and click IAM.
+Step 2. Select Users from left side bar and click on create user.
+Step 3. Add User name, provide user access to AWS management console by clicking on it, select i want to create iam user and choose password method accordingly.
+Step 4. Choose permission option accordingly(assign s3 list bucket policy to it), review and create a user.
 
-**11111111.11111111.11100000.00000000  or  255.255.224.0**
+Current User permission:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ListAllS3buckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
 
-Number of network id 2^3 = 8 but we need only 5 for our projects
-Number of host id per subnet 2^13 - 2 = 8190 addresses (2 are subtracted one for network address and another for broadcast address). So usable host id addresses per subnet are 8190. Increment of 8190 host ids per ip address.
+We can login to iam user thorugh password authentication and can see that user can only list S3 buckets. He cannot list or start and stop EC2 instances.
 
-Block size of third octate is calculated by 8192 / 256 = 32. So start of network range would be 192.168.0.0 to 192.168.31.255
+**2. Create IAM Role:**
 
-**Project 1:**
+Step 1. Select Role from side bar of IAM service page and click on create role.
+Step 2. Choose trusted entity type (choose AWS account as per assignment).
+Step 3. Add permission according to the role (in my case i added an inline policy to start and stop ec2 instances and list all the instances) and add name to the role and policy.
 
-Network Address: 192.168.0.0/19
+Inline policy attached to my role:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "allowStartStopInstance",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:StartInstances",
+                "ec2:StopInstances"
+            ],
+            "Resource": [
+                "arn:aws:ec2:ap-south-1:<account_id>:instance/*"
+            ]
+        },
+        {
+            "Sid": "describeInstance",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
 
-Broadcast Address: 192.168.31.255/19
+**3. Attach role and policy to user by assume role:**
 
-First Usable host address: 192.168.0.1/19
+Step 1. Copy ARN of role and move to user and edit the policy.
+Step 2. Add this policy to user policy and save the changes:
+{
+            "Sid": "AssumeRole",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::<account_id>:role/<role_name>"
+}
 
-Last Usable Host address: 192.168.31.254/19
+Now to list or start and stop EC2 instances user can switch his role.
 
-**Project 2:**
+4. Add MFA to user
 
-Network Address: 192.168.32.0/19
-
-Broadcast Address: 192.168.63.255/19
-
-First Usable host address: 192.168.32.1/19
-
-Last Usable Host address: 192.168.63.254/19
-
-**Project 3:**
-
-Network Address: 192.168.64.0/19
-
-Broadcast Address: 192.168.95.255/19
-
-First Usable host address: 192.168.64.1/19
-
-Last Usable Host address: 192.168.95.254/19
-
-**Project 4:**
-
-Network Address: 192.168.96.0/19
-
-Broadcast Address: 192.168.127.255/19
-
-First Usable host address: 192.168.96.1/19
-
-Last Usable Host address: 192.168.127.254/19
-
-**Project 5:**
-
-Network Address: 192.168.128.0/19
-
-Broadcast Address: 192.168.159.255/19
-
-First Usable host address: 192.168.128.1/19
-
-Last Usable Host address: 192.168.159.254/19
+Step 1. Click on iam user and select the user.
+Step 2. click on security credentials and select assign MFA.
+Step 3. Add MFA device name and scan the QR code to add the MFA.
